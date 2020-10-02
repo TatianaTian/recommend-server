@@ -54,6 +54,11 @@ def recommend(userId, restaurant_list, reviewCountCut):
     
     # check if the user reviews 3 stores:
     user_review = reviews_df[reviews_df['userId']==userId]
+    
+    avg_rating = user_review["review"].mean()
+    
+    
+    
     if user_review.shape[0] > reviewCountCut:
         
         # prepare data
@@ -95,7 +100,7 @@ def recommend(userId, restaurant_list, reviewCountCut):
         for i in range(len(restaurant_list)):
             est_rating = algo.predict(userId, restaurant_list[i]).est
             rating_dict[restaurant_list[i]] = est_rating
-            if (est_rating < 1.6):
+            if (est_rating < avg_rating):
                 rec_list.append(restaurant_list[i])
 
         
