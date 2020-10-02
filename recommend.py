@@ -46,6 +46,8 @@ def stringToList(string):
     
 
 def recommend(userId, restaurant_list, reviewCountCut):
+    print ('restaurant_list is ')
+    print (restaurant_list)
     
     restaurant_list = stringToList(restaurant_list)
     [reviews_df,profile_df] = request_mongo_data()
