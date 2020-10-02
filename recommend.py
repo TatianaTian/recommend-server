@@ -48,7 +48,7 @@ def stringToList(string):
     return res_list
     
 
-def recommend(userId, restaurant_list, reviewCountCut, topN):
+def recommend(userId, restaurant_list, reviewCountCut):
     
     restaurant_list = stringToList(restaurant_list)
     [reviews_df,profile_df] = request_mongo_data()
@@ -91,15 +91,20 @@ def recommend(userId, restaurant_list, reviewCountCut, topN):
 
         # Predict
         rating_dict = {}
+        rec_list = []
 
         for i in range(len(restaurant_list)):
             est_rating = algo.predict(userId, restaurant_list[i]).est
             rating_dict[restaurant_list[i]] = est_rating
+            if (est_rating > 1.7):
+                rec_list.append(restaurant_list[i])
 
-        rating_dict = {k: v for k, v in sorted(rating_dict.items(), key=lambda item: item[0])}
-        res = dict(sorted(rating_dict.items(), key = itemgetter(1), reverse = True)[:topN])
         
-        return list(res.keys())
+        #rating_dict = {k: v for k, v in sorted(rating_dict.items(), key=lambda item: item[0])}
+        #res = dict(sorted(rating_dict.items(), key = itemgetter(1), reverse = True)[:topN])
+        
+        #return list(res.keys())
+        return rec_list
     
     
     

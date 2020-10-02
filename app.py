@@ -19,14 +19,13 @@ def rec():
     user_id = str(request.args.get("user_id", None))
     rest_list = request.args.get("rest_list", None)
     review_cut = int(request.args.get("review_cut", None))
-    top_n = int(request.args.get("top_n", None))
 
-    list = recommend.recommend(user_id, rest_list, review_cut, top_n)
+    list = recommend.recommend(user_id, rest_list, review_cut)
     return jsonify(list)
 
 
 if __name__ == '__main__':
-    app.run(threaded=True, port=6000, debug=True, use_reloader=True)
+    app.run(threaded=True, port=8000, debug=True, use_reloader=True)
     
 
 
