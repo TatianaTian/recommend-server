@@ -13,6 +13,8 @@ from surprise import Reader
 from surprise import KNNWithMeans
 import numpy as np
 from operator import itemgetter 
+from scipy import stats
+import operator
 
 
 def request_mongo_data():
@@ -45,7 +47,7 @@ def stringToList(string):
     return res_list
     
 
-def recommend(userId, restaurant_list, reviewCountCut):
+def recommend(userId, restaurant_list, reviewCountCut, userCountCut):
     print ('restaurant_list is ')
     print (restaurant_list)
     
@@ -108,6 +110,70 @@ def recommend(userId, restaurant_list, reviewCountCut):
         #return list(res.keys())
         return rec_list
     
+    
+    else:
+        profile_np = profile_df.to_numpy()
+        item=[]
+        user=[]
+        rating=[]
+        profile={}
+        profile2={}
+        
+        dict_kid = {}
+        dict_relationship = {}
+        dict_veg = {}
+        dict_religion = {}
+        
+        dict_kid['no'] = 0
+        dict_kid['yes'] = 1
+        dict_relationship['no'] = 0
+        dict_relationship['yes'] = 1
+        dict_veg['vegetarian'] = 0
+        dict_veg['vegan'] = 1
+        dict_veg['none'] = 2
+        dict_religion['halal'] = 0
+        dict_religion['kosher'] = 1
+        dict_religion['none'] = 2
+        
+        loc_age = profile_df.columns.get_loc("age")
+        loc_kids = profile_df.columns.get_loc("kids")
+        loc_relation = profile_df.columns.get_loc("relationship")
+        loc_veg = profile_df.columns.get_loc("veg")
+        loc_rel = profile_df.columns.get_loc("religion")
+        loc_user = profile_df.columns.get_loc("_id")
+
+        for k in range(len(profile_np)):
+            profile[str(profile_np[k][loc_user])] = [profile_np[k][loc_age], dict_kid[profile_np[k][loc_kids]], dict_relationship[profile_np[k][loc_relation]], dict_veg[profile_np[k][loc_veg]],dict_religion[profile_np[k][loc_rel]]]
+    
+        user_id = userId
+        user_profile = profile[user_id]
+        correlation = {}
+        
+        for key in profile:
+            corr = stats.pearsonr(user_profile, profile[key])[0]
+            correlation[key] = corr
+
+        top_x = min(userCountCut+1, len(profile_np))
+        sorted_top_correlation = dict(sorted(correlation.items(), key=operator.itemgetter(1), reverse=True)[:top_x])
+        
+        recom_list = []
+        
+        loc_res = reviews_df.columns.get_loc("restaurantId")
+
+        
+        for key in sorted_top_correlation:
+            review_list_1 = reviews_df[reviews_df['userId']==key]
+            review_list = review_list_1[review_list_1['review']==str(3)]
+            
+            #print(review_list)
+            review_list_np = review_list.to_numpy()
+            for i in range(len(review_list_np)):
+                if review_list_np[i][loc_res] in restaurant_list: 
+                    recom_list = recom_list + [review_list_np[i][loc_res]]
+        
+        print(recom_list)
+        
+        return recom_list
     
     
     

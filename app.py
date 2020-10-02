@@ -19,8 +19,9 @@ def rec():
     user_id = str(request.args.get("user_id", None))
     rest_list = request.args.get("rest_list", None)
     review_cut = int(request.args.get("review_cut", None))
+    user_cut = int(request.args.get("user_cut", None))
 
-    list = recommend.recommend(user_id, rest_list, review_cut)
+    list = recommend.recommend(user_id, rest_list, review_cut, user_cut)
     return jsonify(list)
 
 
