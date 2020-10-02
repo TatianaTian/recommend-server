@@ -33,18 +33,15 @@ def request_mongo_data():
     return [reviews_df,profile_df]
 
 
-def stringToList(string):
+def stringToList(string):            
     res_list = []
     pos = 0
-    count = 0
     for i in range(len(string)):
-        if string[i]=="'" and count == 1:
-            print(i)
+        if string[i]==',':
             res_list.append(string[pos+1:i])
-            count = 0
-        elif string[i]=="'" and count == 0:
             pos = i
-            count = 1
+    
+    res_list.append(string[pos+1:])
     return res_list
     
 
