@@ -98,7 +98,7 @@ def recommend(userId, restaurant_list, reviewCountCut):
         for i in range(len(restaurant_list)):
             est_rating = algo.predict(userId, restaurant_list[i]).est
             rating_dict[restaurant_list[i]] = est_rating
-            if (est_rating < avg_rating):
+            if (est_rating > 2.78):
                 rec_list.append(restaurant_list[i])
 
         
