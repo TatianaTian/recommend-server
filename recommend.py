@@ -59,7 +59,7 @@ def recommend(userId, restaurant_list, reviewCountCut, userCountCut):
     avg_rating = reviews_df["review"].astype('int32').mean()
 
     
-    if user_review.shape[0] > reviewCountCut:
+    if user_review.shape[0] >= reviewCountCut:
         
         # prepare data
         reviews_np = reviews_df.to_numpy()
