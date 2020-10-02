@@ -60,6 +60,7 @@ def recommend(userId, restaurant_list, reviewCountCut, userCountCut):
 
     
     if user_review.shape[0] >= reviewCountCut:
+        print('use review')
         
         # prepare data
         reviews_np = reviews_df.to_numpy()
@@ -112,6 +113,7 @@ def recommend(userId, restaurant_list, reviewCountCut, userCountCut):
     
     
     else:
+        print('use profile')
         profile_np = profile_df.to_numpy()
         item=[]
         user=[]
