@@ -9,9 +9,13 @@ import recommend
 from flask import Flask, request, jsonify
 app = Flask(__name__)
 
+@app.route('/')
+def hello():
+    return "hello"
+
 
 @app.route('/recommend')
-def hello():
+def rec():
     user_id = str(request.args.get("user_id", None))
     rest_list = request.args.get("rest_list", None)
     review_cut = int(request.args.get("review_cut", None))
