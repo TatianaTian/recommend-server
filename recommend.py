@@ -54,10 +54,8 @@ def recommend(userId, restaurant_list, reviewCountCut):
     
     # check if the user reviews 3 stores:
     user_review = reviews_df[reviews_df['userId']==userId]
-    
-    avg_rating = user_review["review"].mean()
-    
-    
+    avg_rating = user_review["review"].astype('int32').mean()
+
     
     if user_review.shape[0] > reviewCountCut:
         
