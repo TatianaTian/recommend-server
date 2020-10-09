@@ -40,7 +40,10 @@ def stringToList(string):
     pos = 0
     for i in range(len(string)):
         if string[i]==',':
-            res_list.append(string[pos+1:i])
+            if (len(res_list) == 0):
+                res_list.append(string[:i])
+            else:
+                res_list.append(string[pos+1:i])
             pos = i
     
     res_list.append(string[pos+1:])
